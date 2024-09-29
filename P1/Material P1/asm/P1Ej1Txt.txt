@@ -1,0 +1,31 @@
+Address     Code        Basic                        Line Source
+
+0x00400000  0x0fc10417  auipc x8,64528               23   	la s0, nums # Carga la posicion de memoria inicial de la lista de numeros
+0x00400004  0x00040413  addi x8,x8,0                      
+0x00400008  0x0fc10497  auipc x9,64528               24   	la s1, array # Carga la posicion de memoria inicial del array donde vamos a guardar la lista ordenada
+0x0040000c  0x02048493  addi x9,x9,32                     
+0x00400010  0x00000513  addi x10,x0,0                25   	li a0, 0 # Carga 0 en A0, donde guardaremos el valor del nuevo array (Redundante)
+0x00400014  0x00000593  addi x11,x0,0                26   	li a1, 0 # Inicializa el recorrido del array (Redundante)
+0x00400018  0x02800913  addi x18,x0,40               28   	li s2, 40 # Limite del array (10*4)
+0x0040001c  0xfff00993  addi x19,x0,-1               29   	addi s3, zero, -1 # 0xFFFF, para utilizar para hacer Complemento A1 con XOR
+0x00400020  0x00100a13  addi x20,x0,1                30   	addi s4, zero, 1 # Usamos un valor constante de uno para usar BGE en el caso x > 0
+0x00400024  0x01e402b3  add x5,x8,x30                35   		add t0, s0, t5 #Calculamos posicion de memoria
+0x00400028  0x0002a303  lw x6,0(x5)                  36   		lw t1, 0(t0) #Cargamos en T1 el valor de nums al que se ha accedido 
+0x0040002c  0x013343b3  xor x7,x6,x19                38   		xor t2, t1, s3 #Complemento A1
+0x00400030  0x00138393  addi x7,x7,1                 39   		addi t2, t2, 1 #Complemento A2
+0x00400034  0x00750e33  add x28,x10,x7               41   		add t3, a0, t2 #(A0-T2). Es una comparacion
+0x00400038  0x000e5a63  bge x28,x0,20                42   		bge t3, zero, loop_advance #Salta si T3 es mayor que A0
+0x0040003c  0x00060663  beq x12,x0,12                46   		beq a2, zero, loop_swapvalue #Si A2 es 0, no hay que comparar.
+0x00400040  0x00760eb3  add x29,x12,x7               47   		add t4, a2, t2 #Compara si A2 < T3
+0x00400044  0x000ec463  blt x29,x0,8                 48   		blt t4, zero, loop_advance #Salta si A2 > T3
+0x00400048  0x00030633  add x12,x6,x0                52   		add a2, t1, zero #Asignamos el valor en T1 (valor cargado de la lista) a A2 (valor a comparar)	
+0x0040004c  0x004f0f13  addi x30,x30,4               55   		addi t5, t5, 4 # Como no podemos usar slli, debemos añadir 4.
+0x00400050  0xfd2f1ae3  bne x30,x18,-44              56   		bne t5, s2, loop_read # Comparamos con 40
+0x00400054  0x00b482b3  add x5,x9,x11                59   		add t0, s1, a1 #Calcula la direccion de escritura
+0x00400058  0x00c2a023  sw x12,0(x5)                 60   		sw a2, 0(t0) #Guarda el valor en la posicion del array correspondiente
+0x0040005c  0x00458593  addi x11,x11,4               61   		addi a1, a1, 4 #Añade "1" (4) al contador de escritura
+0x00400060  0x01258a63  beq x11,x18,20               62   		beq a1, s2, end #Comparamos con 40
+0x00400064  0x00000f33  add x30,x0,x0                63   		add t5, zero, zero #Resetea el contador de recorrido del array num a 0
+0x00400068  0x00060533  add x10,x12,x0               64   		add a0, a2, zero #Asignamos A2 (i) el valor de last (A0)
+0x0040006c  0x00000633  add x12,x0,x0                65   		add a2, zero, zero #Reseteamos A2
+0x00400070  0xfb5ff06f  jal x0,-76                   66   		j loop_read #Reiniciamos el programa
