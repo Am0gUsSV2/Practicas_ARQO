@@ -1,42 +1,72 @@
 Address     Code        Basic                        Line Source
 
-0x00400000  0x0fc10517  auipc x10,0x0000fc10         23   	la a0, nums #Carga direccion nums
-0x00400004  0x00050513  addi x10,x10,0                    
-0x00400008  0x0fc10697  auipc x13,0x0000fc10         24   	la a3, array
-0x0040000c  0x02068693  addi x13,x13,0x00000020           
-0x00400010  0x00000593  addi x11,x0,0                25   	li a1, 0 #Carga 0 en A1, donde guardaremos el valor del nuevo array
-0x00400014  0x00000293  addi x5,x0,0                 26   	li t0, 0 #Inicializa el recorrido del array
-0x00400018  0x00000013  addi x0,x0,0                 27   	nop
-0x0040001c  0x00a00413  addi x8,x0,10                28   	li s0, 10
-0x00400020  0x00229313  slli x6,x5,2                 31   	slli t1, t0, 2
-0x00400024  0x006503b3  add x7,x10,x6                32   	add t2, a0, t1
-0x00400028  0x0003ae03  lw x28,0(x7)                 33   	lw t3, 0(t2)
-0x0040002c  0x01c72eb3  slt x29,x14,x28              34   	slt t4, a4, t3 #Compara si T3 > A4
-0x00400030  0x00000013  addi x0,x0,0                 35   	nop
-0x00400034  0x00000013  addi x0,x0,0                 36   	nop
-0x00400038  0x020e8263  beq x29,x0,0x00000024        37   	beq t4, zero, loop_advance #Salta si A4 > T3
-0x0040003c  0x00060e63  beq x12,x0,0x0000001c        40   	beq a2, zero, loop_swapvalue #Si A2 es 0, no hay que comparar.
-0x00400040  0x00000013  addi x0,x0,0                 41   	nop 
-0x00400044  0x00000013  addi x0,x0,0                 42   	nop
-0x00400048  0x01c62eb3  slt x29,x12,x28              43   	slt t4, a2, t3 #Compara si A2 < T3
-0x0040004c  0x00000013  addi x0,x0,0                 44   	nop 
-0x00400050  0x00000013  addi x0,x0,0                 45   	nop
-0x00400054  0x000e9463  bne x29,x0,0x00000008        46   	bne t4, zero, loop_advance #Salta si A2 > T3
-0x00400058  0x000e0633  add x12,x28,x0               49   	add a2, t3, zero	
-0x0040005c  0x00128293  addi x5,x5,1                 52   	addi t0, t0, 1
-0x00400060  0x00000013  addi x0,x0,0                 53   	nop
-0x00400064  0x00000013  addi x0,x0,0                 54   	nop
-0x00400068  0xfa829ce3  bne x5,x8,0xffffffb8         55   	bne t0, s0, loop_read
-0x0040006c  0x00259f13  slli x30,x11,2               58   	slli t5, a1, 2
-0x00400070  0x00000013  addi x0,x0,0                 59   	nop
-0x00400074  0x00000013  addi x0,x0,0                 60   	nop
-0x00400078  0x01e68fb3  add x31,x13,x30              61   	add t6, a3, t5
-0x0040007c  0x00cfa023  sw x12,0(x31)                62   	sw a2, 0(t6)
-0x00400080  0x00158593  addi x11,x11,1               63   	addi a1, a1, 1 #AÃ±ade 1 al contador de escritura
-0x00400084  0x00000013  addi x0,x0,0                 64   	nop
-0x00400088  0x00000013  addi x0,x0,0                 65   	nop
-0x0040008c  0x00858a63  beq x11,x8,0x00000014        66   	beq a1, s0, end
-0x00400090  0x000002b3  add x5,x0,x0                 67   	add t0, zero, zero #Resetea el contador
-0x00400094  0x00060733  add x14,x12,x0               68   	add a4, a2, zero
-0x00400098  0x00000633  add x12,x0,x0                69   	add a2, zero, zero #Resetea A2
-0x0040009c  0xf85ff06f  jal x0,0xffffff84            70   	j loop_read
+0x00400000  0x0fc10417  auipc x8,0x0000fc10          28   	auipc s0,0x0000fc10
+0x00400004  0x00000013  addi x0,x0,0                 29   	nop
+0x00400008  0x00000013  addi x0,x0,0                 30   	nop
+0x0040000c  0x00040413  addi x8,x8,0                 31   	addi s0,s0,0
+0x00400010  0x0fc10497  auipc x9,0x0000fc10          33   	auipc s1,0x0000fc10 
+0x00400014  0x00000013  addi x0,x0,0                 34   	nop
+0x00400018  0x00000013  addi x0,x0,0                 35   	nop
+0x0040001c  0x01848493  addi x9,x9,24                36   	addi s1,s1,0x00000018
+0x00400020  0x00000513  addi x10,x0,0                37   	li a0, 0 # Carga 0 en A0, donde guardaremos el valor del nuevo array (Redundante)
+0x00400024  0x00000593  addi x11,x0,0                38   	li a1, 0 # Inicializa el recorrido del array (Redundante)
+0x00400028  0x02800913  addi x18,x0,0x00000028       40   	li s2, 40 # Limite del array (10*4)
+0x0040002c  0xfff00993  addi x19,x0,0xffffffff       41   	addi s3, zero, -1 # 0xFFFF, para utilizar para hacer Complemento A1 con XOR
+0x00400030  0x00100a13  addi x20,x0,1                42   	addi s4, zero, 1 # Usamos un valor constante de uno para usar BGE en el caso x > 0
+0x00400034  0x01e402b3  add x5,x8,x30                47   		add t0, s0, t5 #Calculamos posicion de memoria
+0x00400038  0x00000013  addi x0,x0,0                 48   		nop
+0x0040003c  0x00000013  addi x0,x0,0                 49   		nop
+0x00400040  0x0002a303  lw x6,0(x5)                  50   		lw t1, 0(t0) #Cargamos en T1 el valor de nums al que se ha accedido 
+0x00400044  0x00000013  addi x0,x0,0                 51   		nop
+0x00400048  0x00000013  addi x0,x0,0                 52   		nop
+0x0040004c  0x00000013  addi x0,x0,0                 53   		nop
+0x00400050  0x013343b3  xor x7,x6,x19                55   		xor t2, t1, s3 #Complemento A1
+0x00400054  0x00000013  addi x0,x0,0                 56   		nop
+0x00400058  0x00000013  addi x0,x0,0                 57   		nop
+0x0040005c  0x00138393  addi x7,x7,1                 58   		addi t2, t2, 1 #Complemento A2
+0x00400060  0x00000013  addi x0,x0,0                 59   		nop
+0x00400064  0x00000013  addi x0,x0,0                 60   		nop
+0x00400068  0x00750e33  add x28,x10,x7               62   		add t3, a0, t2 #(A0-T2). Es una comparacion
+0x0040006c  0x00000013  addi x0,x0,0                 63   		nop
+0x00400070  0x00000013  addi x0,x0,0                 64   		nop
+0x00400074  0x040e5063  bge x28,x0,0x00000040        65   		bge t3, zero, loop_advance #Salta si T3 es mayor que A0
+0x00400078  0x00000013  addi x0,x0,0                 66   		nop
+0x0040007c  0x00000013  addi x0,x0,0                 67   		nop
+0x00400080  0x00000013  addi x0,x0,0                 68   		nop
+0x00400084  0x02060663  beq x12,x0,0x0000002c        72   		beq a2, zero, loop_swapvalue #Si A2 es 0, no hay que comparar.
+0x00400088  0x00000013  addi x0,x0,0                 73   		nop
+0x0040008c  0x00000013  addi x0,x0,0                 74   		nop
+0x00400090  0x00000013  addi x0,x0,0                 75   		nop
+0x00400094  0x00760eb3  add x29,x12,x7               76   		add t4, a2, t2 #Compara si A2 < T3
+0x00400098  0x00000013  addi x0,x0,0                 77   		nop
+0x0040009c  0x00000013  addi x0,x0,0                 78   		nop
+0x004000a0  0x000eca63  blt x29,x0,0x00000014        79   		blt t4, zero, loop_advance #Salta si A2 > T3
+0x004000a4  0x00000013  addi x0,x0,0                 80   		nop
+0x004000a8  0x00000013  addi x0,x0,0                 81   		nop
+0x004000ac  0x00000013  addi x0,x0,0                 82   		nop
+0x004000b0  0x00030633  add x12,x6,x0                86   		add a2, t1, zero #Asignamos el valor en T1 (valor cargado de la lista) a A2 (valor a comparar)	
+0x004000b4  0x004f0f13  addi x30,x30,4               89   		addi t5, t5, 4 # Como no podemos usar slli, debemos añadir 4.
+0x004000b8  0x00000013  addi x0,x0,0                 90   		nop
+0x004000bc  0x00000013  addi x0,x0,0                 91   		nop
+0x004000c0  0xf72f1ae3  bne x30,x18,0xffffff74       92   		bne t5, s2, loop_read # Comparamos con 40
+0x004000c4  0x00000013  addi x0,x0,0                 93   		nop
+0x004000c8  0x00000013  addi x0,x0,0                 94   		nop
+0x004000cc  0x00000013  addi x0,x0,0                 95   		nop
+0x004000d0  0x00b482b3  add x5,x9,x11                98   		add t0, s1, a1 #Calcula la direccion de escritura
+0x004000d4  0x00000013  addi x0,x0,0                 99   		nop
+0x004000d8  0x00000013  addi x0,x0,0                 100  		nop
+0x004000dc  0x00c2a023  sw x12,0(x5)                 101  		sw a2, 0(t0) #Guarda el valor en la posicion del array correspondiente
+0x004000e0  0x00458593  addi x11,x11,4               102  		addi a1, a1, 4 #Añade "1" (4) al contador de escritura
+0x004000e4  0x00000013  addi x0,x0,0                 103  		nop
+0x004000e8  0x00000013  addi x0,x0,0                 104  		nop
+0x004000ec  0x03258663  beq x11,x18,0x0000002c       105  		beq a1, s2, end #Comparamos con 40
+0x004000f0  0x00000013  addi x0,x0,0                 106  		nop
+0x004000f4  0x00000013  addi x0,x0,0                 107  		nop
+0x004000f8  0x00000013  addi x0,x0,0                 108  		nop
+0x004000fc  0x00000f33  add x30,x0,x0                109  		add t5, zero, zero #Resetea el contador de recorrido del array num a 0. En esta seccion, no necesitamos NOP
+0x00400100  0x00060533  add x10,x12,x0               110  		add a0, a2, zero #Asignamos A2 (i) el valor de last (A0)
+0x00400104  0x00000633  add x12,x0,x0                111  		add a2, zero, zero #Reseteamos A2
+0x00400108  0xf2dff06f  jal x0,0xffffff2c            112  		j loop_read #Reiniciamos el programa
+0x0040010c  0x00000013  addi x0,x0,0                 113          	nop
+0x00400110  0x00000013  addi x0,x0,0                 114          	nop
+0x00400114  0x00000013  addi x0,x0,0                 115          	nop

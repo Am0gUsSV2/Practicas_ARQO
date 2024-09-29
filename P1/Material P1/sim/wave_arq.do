@@ -20,8 +20,17 @@ add wave -noupdate -divider {Alu - Entradas Salidas}
 add wave -noupdate -radix hexadecimal /processorrv_tb/i_processor/Alu_Op1
 add wave -noupdate -radix hexadecimal /processorrv_tb/i_processor/Alu_Op2
 add wave -noupdate -divider {Control Riesgos - Hazards}
+add wave -noupdate /processorrv_tb/i_data_mem/Clk
+add wave -noupdate /processorrv_tb/i_data_mem/RdEn
+add wave -noupdate /processorrv_tb/i_data_mem/DataOut
+add wave -noupdate /processorrv_tb/i_data_mem/rAddr
+add wave -noupdate /processorrv_tb/i_data_mem/effectAddress
+add wave -noupdate /processorrv_tb/i_data_mem/addr_in_range
+add wave -noupdate /processorrv_tb/i_data_mem/WrEn
+add wave -noupdate /processorrv_tb/i_data_mem/DataIn
+add wave -noupdate /processorrv_tb/i_data_mem/Addr
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {11 ns} 0}
+WaveRestoreCursors {{Cursor 1} {3405 ns} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 150
 configure wave -valuecolwidth 100
@@ -37,4 +46,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 ns} {218 ns}
+WaveRestoreZoom {3308 ns} {3526 ns}
