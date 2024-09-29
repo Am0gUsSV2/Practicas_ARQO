@@ -24,6 +24,7 @@ array: .word
 	la a3, array
 	li a1, 0 #Carga 0 en A1, donde guardaremos el valor del nuevo array
 	li t0, 0 #Inicializa el recorrido del array
+	nop
 	li s0, 10
 	
 	loop_read: #Bucle de lectura
@@ -31,11 +32,17 @@ array: .word
 	add t2, a0, t1
 	lw t3, 0(t2)
 	slt t4, a4, t3 #Compara si T3 > A4
+	nop
+	nop
 	beq t4, zero, loop_advance #Salta si A4 > T3
 	
 	loop_cmp: #Solo esta para que se sepa que aqui se hace la segunda comparacion
 	beq a2, zero, loop_swapvalue #Si A2 es 0, no hay que comparar.
+	nop 
+	nop
 	slt t4, a2, t3 #Compara si A2 < T3
+	nop 
+	nop
 	bne t4, zero, loop_advance #Salta si A2 > T3
 	
 	loop_swapvalue: #Solo esta para que se sepa que aqui se cambia el valor
@@ -43,13 +50,19 @@ array: .word
 	
 	loop_advance: #Añade uno al bucle de lectura y lo continua si aun no ha leido todos los valores
 	addi t0, t0, 1
+	nop
+	nop
 	bne t0, s0, loop_read
 	
 	loop_write: #Escribe el valor obtenido en el nuevo array, y lo guarda como valor a comparar. Termina si se han escrito todos los valores
 	slli t5, a1, 2
+	nop
+	nop
 	add t6, a3, t5
 	sw a2, 0(t6)
 	addi a1, a1, 1 #Añade 1 al contador de escritura
+	nop
+	nop
 	beq a1, s0, end
 	add t0, zero, zero #Resetea el contador
 	add a4, a2, zero

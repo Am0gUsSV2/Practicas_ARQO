@@ -1,31 +1,42 @@
 Address     Code        Basic                        Line Source
 
-0x00400000  0x0fc10297  auipc x5,0x0000fc10          18   main:    la   t0, buffer          # carga la drecci�n del buffer en t0 (X5)
-0x00400004  0x00028293  addi x5,x5,0                      
-0x00400008  0x00800313  addi x6,x0,8                 21   	 li   t1, 8               # x6 = 8
-0x0040000c  0x0062a023  sw x6,0(x5)                  22     	 sw   t1, 0(t0)           # buff[0] = x6
-0x00400010  0x0002a383  lw x7,0(x5)                  23   	 lw   t2, 0(t0)           # x7 = buff[0]
-0x00400014  0x04731e63  bne x6,x7,0x0000005c         24   	 bne  t1, t2, failure     # if x6 /= x7 fallo
-0x00400018  0x03800e13  addi x28,x0,0x00000038       25   	 li   t3, 56              # x28 = 56
-0x0040001c  0x01c2a223  sw x28,4(x5)                 26   	 sw   t3, 4(t0)
-0x00400020  0x00428293  addi x5,x5,4                 27   	 addi t0, t0, 4
-0x00400024  0x0002ae83  lw x29,0(x5)                 28   	 lw   t4, 0(t0)
-0x00400028  0x05de1463  bne x28,x29,0x00000048       29   	 bne  t3, t4, failure
-0x0040002c  0xffc2af03  lw x30,0xfffffffc(x5)        30   	 lw   t5, -4(t0)
-0x00400030  0x046f1063  bne x30,x6,0x00000040        31   	 bne  t5, t1, failure
-0x00400034  0xff00f337  lui x6,0xfffff00f            32   	 li   t1, 0xFF00F007      # x6 = 0xFF00F007
-0x00400038  0x00730313  addi x6,x6,7                      
-0x0040003c  0x0ff00393  addi x7,x0,0x000000ff        33   	 li   t2, 0xFF            # x7 = FF
-0x00400040  0x00737333  and x6,x6,x7                 34   	 and  t1, t1, t2          # x6 debe queda 7
-0x00400044  0x00700e13  addi x28,x0,7                35   	 li   t3, 7
-0x00400048  0x03c31463  bne x6,x28,0x00000028        36   	 bne  t1, t3, failure
-0x0040004c  0x000013b7  lui x7,1                     37   	 li   t2, 0xFFF           # x7 = FFF
-0x00400050  0xfff38393  addi x7,x7,0xffffffff             
-0x00400054  0xfff3c393  xori x7,x7,0xffffffff        38   	 not  t2, t2              # x7 = FFFF_F000
-0x00400058  0xfffffe37  lui x28,0x000fffff           39   	 lui  t3, 0xFFFFF         # x28 = FFFFF << 12 = FFFF_F000
-0x0040005c  0x01c39a63  bne x7,x28,0x00000014        40   	 bne  t2, t3, failure
-0x00400060  0x00000663  beq x0,x0,0x0000000c         41   	 beq zero, zero, success  # jump (sala) a etiqueta success
-0x00400064  0x00138393  addi x7,x7,1                 42   	 addi t2, t2, 1	          # No se ejecuta
-0x00400068  0x00138393  addi x7,x7,1                 43   	 addi t2, t2, 1	          # No se ejecuta
-0x0040006c  0x00000063  beq x0,x0,0x00000000         45   success: beq zero, zero, success
-0x00400070  0x00000063  beq x0,x0,0x00000000         47   failure: beq zero, zero, failure
+0x00400000  0x0fc10517  auipc x10,0x0000fc10         23   	la a0, nums #Carga direccion nums
+0x00400004  0x00050513  addi x10,x10,0                    
+0x00400008  0x0fc10697  auipc x13,0x0000fc10         24   	la a3, array
+0x0040000c  0x02068693  addi x13,x13,0x00000020           
+0x00400010  0x00000593  addi x11,x0,0                25   	li a1, 0 #Carga 0 en A1, donde guardaremos el valor del nuevo array
+0x00400014  0x00000293  addi x5,x0,0                 26   	li t0, 0 #Inicializa el recorrido del array
+0x00400018  0x00000013  addi x0,x0,0                 27   	nop
+0x0040001c  0x00a00413  addi x8,x0,10                28   	li s0, 10
+0x00400020  0x00229313  slli x6,x5,2                 31   	slli t1, t0, 2
+0x00400024  0x006503b3  add x7,x10,x6                32   	add t2, a0, t1
+0x00400028  0x0003ae03  lw x28,0(x7)                 33   	lw t3, 0(t2)
+0x0040002c  0x01c72eb3  slt x29,x14,x28              34   	slt t4, a4, t3 #Compara si T3 > A4
+0x00400030  0x00000013  addi x0,x0,0                 35   	nop
+0x00400034  0x00000013  addi x0,x0,0                 36   	nop
+0x00400038  0x020e8263  beq x29,x0,0x00000024        37   	beq t4, zero, loop_advance #Salta si A4 > T3
+0x0040003c  0x00060e63  beq x12,x0,0x0000001c        40   	beq a2, zero, loop_swapvalue #Si A2 es 0, no hay que comparar.
+0x00400040  0x00000013  addi x0,x0,0                 41   	nop 
+0x00400044  0x00000013  addi x0,x0,0                 42   	nop
+0x00400048  0x01c62eb3  slt x29,x12,x28              43   	slt t4, a2, t3 #Compara si A2 < T3
+0x0040004c  0x00000013  addi x0,x0,0                 44   	nop 
+0x00400050  0x00000013  addi x0,x0,0                 45   	nop
+0x00400054  0x000e9463  bne x29,x0,0x00000008        46   	bne t4, zero, loop_advance #Salta si A2 > T3
+0x00400058  0x000e0633  add x12,x28,x0               49   	add a2, t3, zero	
+0x0040005c  0x00128293  addi x5,x5,1                 52   	addi t0, t0, 1
+0x00400060  0x00000013  addi x0,x0,0                 53   	nop
+0x00400064  0x00000013  addi x0,x0,0                 54   	nop
+0x00400068  0xfa829ce3  bne x5,x8,0xffffffb8         55   	bne t0, s0, loop_read
+0x0040006c  0x00259f13  slli x30,x11,2               58   	slli t5, a1, 2
+0x00400070  0x00000013  addi x0,x0,0                 59   	nop
+0x00400074  0x00000013  addi x0,x0,0                 60   	nop
+0x00400078  0x01e68fb3  add x31,x13,x30              61   	add t6, a3, t5
+0x0040007c  0x00cfa023  sw x12,0(x31)                62   	sw a2, 0(t6)
+0x00400080  0x00158593  addi x11,x11,1               63   	addi a1, a1, 1 #Añade 1 al contador de escritura
+0x00400084  0x00000013  addi x0,x0,0                 64   	nop
+0x00400088  0x00000013  addi x0,x0,0                 65   	nop
+0x0040008c  0x00858a63  beq x11,x8,0x00000014        66   	beq a1, s0, end
+0x00400090  0x000002b3  add x5,x0,x0                 67   	add t0, zero, zero #Resetea el contador
+0x00400094  0x00060733  add x14,x12,x0               68   	add a4, a2, zero
+0x00400098  0x00000633  add x12,x0,x0                69   	add a2, zero, zero #Resetea A2
+0x0040009c  0xf85ff06f  jal x0,0xffffff84            70   	j loop_read
