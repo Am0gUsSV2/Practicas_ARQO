@@ -93,6 +93,14 @@ architecture rtl of processorRV is
   signal Alu_ZERO_EX     : std_logic;
   signal Alu_SIGN_EX     : std_logic;
   signal AluControl      : std_logic_vector(3 downto 0);
+  --
+  --ANIADIDO
+  --
+  signal reg_RS1_EX_afMux : std_logic_vector(31 downto 0);
+  signal reg_RS2_EX_afMux : std_logic_vector(31 downto 0);
+  --
+  --ANIADIDO
+  --
 
   -- Signals -- MEM
   signal Addr_Jump_ME    : std_logic_vector(31 downto 0);
@@ -124,16 +132,48 @@ architecture rtl of processorRV is
   -- Other Signals for hazard control
   signal flush           : std_logic := '0';
   signal stall           : std_logic := '0';  
-  -- signal reg_RS1_FW      : std_logic_vector(31 downto 0);
-  -- signal reg_RS2_FW      : std_logic_vector(31 downto 0);
-  -- signal ForwardA        : std_logic_vector (1 downto 0);  -- Adelantamiento operando 1
-  -- signal ForwardB        : std_logic_vector (1 downto 0);  -- Adelantamiento operando 2
+  signal reg_RS1_FW      : std_logic_vector(31 downto 0);
+  signal reg_RS2_FW      : std_logic_vector(31 downto 0);
+  signal ForwardA        : std_logic_vector (1 downto 0);  -- Adelantamiento operando 1
+  signal ForwardB        : std_logic_vector (1 downto 0);  -- Adelantamiento operando 2
 
 begin
 
+
+
+--
+
+--ANIADIDO
+
+--
 -------------------------------------------
 -- Instanciar aquío la Hazard detection unit
+UnidadRiesgos: Hazard_unit
+port map(
+  -- Entradas Forwarding
+  RegWrite_ME => Ctrl_RegWrite_ME,
+  RegWrite_WB => Ctrl_RegWrite_WB,
+  RD_ME       => RD_ME,
+  RD_WB       => RD_WB,
+  RS1_EX      => RS1_EX,
+  RS2_EX      => RS2_EX,
+  -- Entradas para evitar Load-Use
+  MemRead_EX  => Ctrl_MemRead_EX,
+  RD_EX       => RD_EX,
+  RS1_ID      => RS1_ID,
+  RS2_ID      => RS2_ID,
 
+  -- Salidas Forwarding
+  ForwardA    => ForwardA,
+  ForwardB    => ForwardB,
+  -- Salidas para evitar Load-USE hazard
+  stall_pipe  => stall
+);
+--
+
+--ANIADIDO
+
+--
 
 -------------------------------------------
 ----** Etapa IF instraction Fetching **----
@@ -300,8 +340,31 @@ begin
 
   -- Aquí describir los Multiplexores de Adelantamiento de datos
 
-  Alu_Op1    <= reg_RS1_EX when Ctrl_auiPc_EX  = '0' else PC_reg_EX;
-  Alu_Op2    <= reg_RS2_EX when Ctrl_ALUSrc_EX = '0' else Imm_ext_EX;
+
+
+
+
+--
+
+--ANIADIDO
+
+--
+
+
+reg_RS1_EX_afMux  <= Alu_Res_ME when ForwardA = "01" else
+                result_WB when ForwardA = "10" else
+                reg_RS1_EX;
+
+reg_RS2_EX_afMux  <= Alu_Res_ME when ForwardB = "01" else
+                result_WB when ForwardB = "10" else
+                reg_RS2_EX;
+--
+
+--ANIADIDO
+
+--
+  Alu_Op1    <= reg_RS1_EX_afMux when Ctrl_auiPc_EX  = '0' else PC_reg_EX;
+  Alu_Op2    <= reg_RS2_EX_afMux when Ctrl_ALUSrc_EX = '0' else Imm_ext_EX;
 
   Alu_RISCV : alu_RV
   port map (

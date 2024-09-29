@@ -11,8 +11,10 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_unsigned.all;          
+use ieee.std_logic_unsigned.all;
+use ieee.numeric_std.all;          
 use work.RISCV_pack.all;
+
 
 entity Hazard_unit is
    port (
@@ -24,7 +26,7 @@ entity Hazard_unit is
       RS1_EX      : in  std_logic_vector( 4 downto 0); -- Reg fuente 1 en EX
       RS2_EX      : in  std_logic_vector( 4 downto 0); -- Reg fuente 2 en EX
       -- Entradas para evitar Load-Use
-      MemRead_EX  : in  std_logic;                     -- Intrucción en EX es una Load
+      MemRead_EX  : in  std_logic;                     -- Instrucción en EX es una Load
       RD_EX       : in  std_logic_vector( 4 downto 0); -- Reg lectura del Load en EX
       RS1_ID      : in  std_logic_vector( 4 downto 0); -- Reg fuente 1 en DE
       RS2_ID      : in  std_logic_vector( 4 downto 0); -- Reg fuente 2 en DE
@@ -40,11 +42,37 @@ end Hazard_unit;
 architecture rtl of Hazard_unit is
 
 begin
+   ForwardA <= --"01" when ((unsigned(RS1_EX) = unsigned(RD_ME)) and (RegWrite_ME /= '0')) and (unsigned(RS1_EX) /= 0) else
+               --"10" when ((unsigned(RS1_EX) = unsigned(RD_WB)) and (RegWrite_WB  /= '0')) and (unsigned(RS1_EX) /= 0) else
+               "00";
 
+   ForwardB <= --"01" when ((unsigned(RS2_EX) = unsigned(RD_ME)) and (RegWrite_ME /= '0')) and (unsigned(RS2_EX) /= 0) else
+               --"10" when ((unsigned(RS2_EX) = unsigned(RD_WB)) and (RegWrite_WB  /= '0')) and (unsigned(RS2_EX) /= 0) else
+               "00";
 --Forwarding Unit
-  ForwardA <= "00"; --No Forwarding
+  --process(RS1_EX)
+  --begin
+  -- if((unsigned(RS1_EX) = unsigned(RD_ME)) and RegWrite_ME /= '0') and (unsigned(RS1_EX) /= 0) then
+  --    ForwardA <= "01";
+  -- elsif((unsigned(RS1_EX) = unsigned(RD_WB)) and (RegWrite_WB  /= '0')) and (unsigned(RS1_EX) /= 0) then
+  --    ForwardA <= "10";
+  -- else 
+  --    ForwardA <= "00";
+  -- end if;
 
-  ForwardB <= "00"; --No Forwarding
+  --end process;
+
+ -- process(RS2_EX)
+ -- begin
+ --  if((unsigned(RS2_EX) = unsigned(RD_ME)) and (RegWrite_ME /= '0')) and (unsigned(RS2_EX) /= 0) then
+ --     ForwardB <= "01";
+  -- elsif((unsigned(RS2_EX) = unsigned(RD_WB)) and ((RegWrite_WB) /= '0')) and (unsigned(RS2_EX) /= 0) then
+  --    ForwardB <= "10";
+ --  else 
+ --     ForwardB <= "00";
+ --  end if;
+
+ -- end process;
 
 
   --Hazard detection unit for LW - Use

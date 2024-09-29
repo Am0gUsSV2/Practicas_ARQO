@@ -24,7 +24,7 @@ vcom -work work -2008 -explicit memory_instr.vhd
 vcom -work work -2008 -explicit processorR5_tb.vhd
 
 # Elaboracion:
-vsim -voptargs="+acc" -gINIT_FILENAME_INST="instrucciones.txt" -gINIT_FILENAME_DATA="datos.txt" -gN_CYCLES=150 processorRV_tb
+vsim -voptargs="+acc" -gINIT_FILENAME_INST="instrucciones.txt" -gINIT_FILENAME_DATA="datos.txt" -gN_CYCLES=3000 processorRV_tb
 
 
 # Opcion para guardar todas las ondas:
