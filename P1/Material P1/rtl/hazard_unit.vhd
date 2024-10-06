@@ -76,13 +76,19 @@ begin
 
 
   --Hazard detection unit for LW - Use
-  process(RS1_ID, RS2_ID, RD_EX, MemRead_EX)
-  begin
-   if ((unsigned(RS1_ID) = unsigned(RD_EX)) or (unsigned(RS2_ID) = unsigned(RD_EX)) and MemRead_EX = '1') then
-      stall_pipe <= '1'
+--   stall_pipe <= '1' when (((unsigned(RS1_ID) = unsigned(RD_EX)) or (unsigned(RS2_ID) = unsigned(RD_EX))) and (MemRead_EX = '1')) else
+--                 '0'
 
+--   process(RS1_ID, RS2_ID, RD_EX, MemRead_EX)
+--   begin
+--    if (((unsigned(RS1_ID) = unsigned(RD_EX)) or (unsigned(RS2_ID) = unsigned(RD_EX))) and (MemRead_EX = '1')) then
+--       stall_pipe <= '1';
+--    end if;
+--   end process;
 
-  --stall_pipe <= '1' when ((unsigned(RS1_ID) = unsigned(RD_EX)) or (unsigned(RS2_ID) = unsigned(RD_EX)) and MemRead_EX = '1'); -- funcionamiento normal. No detenciones
-  
+  --stall_pipe <= '0'; -- funcionamiento normal. No detenciones
+
+  stall_pipe <= '1' when (((unsigned(RS1_ID) = unsigned(RD_EX)) or (unsigned(RS2_ID) = unsigned(RD_EX))) and (MemRead_EX = '1')) else
+                '0';
 
 end architecture;

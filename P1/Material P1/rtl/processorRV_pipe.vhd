@@ -93,6 +93,7 @@ architecture rtl of processorRV is
   signal Alu_ZERO_EX     : std_logic;
   signal Alu_SIGN_EX     : std_logic;
   signal AluControl      : std_logic_vector(3 downto 0);
+
   --
   --ANIADIDO
   --
@@ -142,12 +143,10 @@ begin
 
 
 --
-
 --ANIADIDO
-
 --
 -------------------------------------------
--- Instanciar aquío la Hazard detection unit
+-- Instanciar aquí la Hazard detection unit
 UnidadRiesgos: Hazard_unit
 port map(
   -- Entradas Forwarding
@@ -170,9 +169,7 @@ port map(
   stall_pipe  => stall
 );
 --
-
 --ANIADIDO
-
 --
 
 -------------------------------------------
@@ -345,23 +342,20 @@ port map(
 
 
 --
-
 --ANIADIDO
-
 --
-
-
 reg_RS1_EX_afMux  <= Alu_Res_ME when ForwardA = "01" else
-                result_WB when ForwardA = "10" else
-                reg_RS1_EX;
+                     result_WB when ForwardA = "10" else
+                     reg_RS1_EX;
 
 reg_RS2_EX_afMux  <= Alu_Res_ME when ForwardB = "01" else
-                result_WB when ForwardB = "10" else
-                reg_RS2_EX;
+                     result_WB when ForwardB = "10" else
+                     reg_RS2_EX;
+
+--flush <= '1' when stall = '1' else
+--         '0';
 --
-
 --ANIADIDO
-
 --
   Alu_Op1    <= reg_RS1_EX_afMux when Ctrl_auiPc_EX  = '0' else PC_reg_EX;
   Alu_Op2    <= reg_RS2_EX_afMux when Ctrl_ALUSrc_EX = '0' else Imm_ext_EX;
