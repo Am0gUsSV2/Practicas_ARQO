@@ -1,0 +1,15 @@
+Diego:
+
+2.1. Resolucion de instrucciones tipo R (las que son 2 NOP):
+
+-Necesitamos una forma de saber si hay que adelantar datos (comparar registros utilizados)
+-Flanco de subida: Escribir datos en unidad de control de riesgos
+-Flanco de bajada: Dependiendo del multiplexor que lee los datos, lee datos de una fase posterior o los originales.
+
+2.2. Resolucion de instrucciones load (al menos lw, porque la son dos intrucciones y li es addi x8, x0, x0)
+-Necesitamos añadir una forma de saber que es un load (MemLoad)
+-Si en fase D, si Rd de load = Reg1 o Reg2 de la instruccion, debemos añadir un nop ahi
+-Por lo demas, funciona igual que una R
+
+3. Resolucion de branches
+-Adaptar lo del 2.2, pero haciendolo por 3 si detecta que hay un salto
