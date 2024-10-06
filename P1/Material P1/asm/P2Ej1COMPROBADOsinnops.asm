@@ -42,9 +42,6 @@ array: .word
 	
 		add t0, s0, t5 #Calculamos posicion de memoria
 		lw t1, 0(t0) #Cargamos en T1 el valor de nums al que se ha accedido 
-		nop #Este se quita implementando el stall
-		nop
-		nop
 		xor t2, t1, s3 #Complemento A1
 		addi t2, t2, 1 #Complemento A2	
 		add t3, a0, t2 #(A0-T2). Es una comparacion

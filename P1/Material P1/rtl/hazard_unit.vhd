@@ -42,12 +42,12 @@ end Hazard_unit;
 architecture rtl of Hazard_unit is
 
 begin
-   ForwardA <= --"01" when ((unsigned(RS1_EX) = unsigned(RD_ME)) and (RegWrite_ME /= '0')) and (unsigned(RS1_EX) /= 0) else
-               --"10" when ((unsigned(RS1_EX) = unsigned(RD_WB)) and (RegWrite_WB  /= '0')) and (unsigned(RS1_EX) /= 0) else
+   ForwardA <= "01" when ((unsigned(RS1_EX) = unsigned(RD_ME)) and (RegWrite_ME = '1')) and (unsigned(RS1_EX) /= "00000") else
+               "10" when ((unsigned(RS1_EX) = unsigned(RD_WB)) and (RegWrite_WB  = '1')) and (unsigned(RS1_EX) /= "00000") else
                "00";
 
-   ForwardB <= --"01" when ((unsigned(RS2_EX) = unsigned(RD_ME)) and (RegWrite_ME /= '0')) and (unsigned(RS2_EX) /= 0) else
-               --"10" when ((unsigned(RS2_EX) = unsigned(RD_WB)) and (RegWrite_WB  /= '0')) and (unsigned(RS2_EX) /= 0) else
+   ForwardB <= "01" when ((unsigned(RS2_EX) = unsigned(RD_ME)) and (RegWrite_ME = '1')) and (unsigned(RS2_EX) /= "00000") else
+               "10" when ((unsigned(RS2_EX) = unsigned(RD_WB)) and (RegWrite_WB  = '1')) and (unsigned(RS2_EX) /= "00000") else
                "00";
 --Forwarding Unit
   --process(RS1_EX)
@@ -76,7 +76,13 @@ begin
 
 
   --Hazard detection unit for LW - Use
-  stall_pipe <= '0'; -- funcionamiento normal. No detenciones
+  process(RS1_ID, RS2_ID, RD_EX, MemRead_EX)
+  begin
+   if ((unsigned(RS1_ID) = unsigned(RD_EX)) or (unsigned(RS2_ID) = unsigned(RD_EX)) and MemRead_EX = '1') then
+      stall_pipe <= '1'
 
+
+  --stall_pipe <= '1' when ((unsigned(RS1_ID) = unsigned(RD_EX)) or (unsigned(RS2_ID) = unsigned(RD_EX)) and MemRead_EX = '1'); -- funcionamiento normal. No detenciones
+  
 
 end architecture;
