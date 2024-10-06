@@ -12,7 +12,7 @@
 # 	new_array[x] = i (sw en x*4 de la posicion de new_array)
 # 	last = i (valor minimo)
 # 	i= -1
-#Version 3: Añadimos los nop y cambiamos los la (por hacer, usar el .text para hacer los cambios y meter dos nop en los auipc)
+#Version 3: Aï¿½adimos los nop y cambiamos los la (por hacer, usar el .text para hacer los cambios y meter dos nop en los auipc)
 #Tipo R: Si hay conflicto, dos NOP
 #LW: Si hay conflicto, tres NOP
 #Branch y J: Debido a que se comprueba en ciclo M, aplicamos 3 NOP para que no ejecute ninguna instruccion nueva
@@ -57,23 +57,20 @@ array: .word
 	
 		add a2, t1, zero #Asignamos el valor en T1 (valor cargado de la lista) a A2 (valor a comparar)	
 	
-	loop_advance: #Añade "uno" (cuatro) al bucle de lectura y lo continua si aun no ha leido todos los valores
-		addi t5, t5, 4 # Como no podemos usar slli, debemos añadir 4.
+	loop_advance: #Aï¿½ade "uno" (cuatro) al bucle de lectura y lo continua si aun no ha leido todos los valores
+		addi t5, t5, 4 # Como no podemos usar slli, debemos aï¿½adir 4.
 		bne t5, s2, loop_read # Comparamos con 40
 	
 	loop_write: #Escribe el valor obtenido en el nuevo array, y lo guarda como valor a comparar. Termina si se han escrito todos los valores
 		add t0, s1, a1 #Calcula la direccion de escritura
 		sw a2, 0(t0) #Guarda el valor en la posicion del array correspondiente
-		addi a1, a1, 4 #Añade "1" (4) al contador de escritura
+		addi a1, a1, 4 #Aï¿½ade "1" (4) al contador de escritura
 		beq a1, s2, end #Comparamos con 40
 		add t5, zero, zero #Resetea el contador de recorrido del array num a 0. En esta seccion, no necesitamos NOP
 		add a0, a2, zero #Asignamos A2 (i) el valor de last (A0)
 		add a2, zero, zero #Reseteamos A2
 		j loop_read #Reiniciamos el programa
-		nop #Este se quita al resolver adelantamientos por saltos
-		nop #Este se quita al resolver adelantamientos por saltos
-		nop #Este se quita al resolver adelantamientos por saltos
-	
+
 	end: #Fin de programa
 	
 	
