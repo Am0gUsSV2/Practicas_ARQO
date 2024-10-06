@@ -142,6 +142,7 @@ begin
 
 
 
+
 --
 --ANIADIDO
 --
@@ -171,6 +172,8 @@ port map(
 --
 --ANIADIDO
 --
+
+
 
 -------------------------------------------
 ----** Etapa IF instraction Fetching **----
@@ -352,11 +355,15 @@ reg_RS2_EX_afMux  <= Alu_Res_ME when ForwardB = "01" else
                      result_WB when ForwardB = "10" else
                      reg_RS2_EX;
 
---flush <= '1' when stall = '1' else
---         '0';
+  flush <= '1' when decision_Jump = '1' else
+           '0';
 --
 --ANIADIDO
 --
+
+
+
+
   Alu_Op1    <= reg_RS1_EX_afMux when Ctrl_auiPc_EX  = '0' else PC_reg_EX;
   Alu_Op2    <= reg_RS2_EX_afMux when Ctrl_ALUSrc_EX = '0' else Imm_ext_EX;
 
