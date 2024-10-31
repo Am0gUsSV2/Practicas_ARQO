@@ -6,6 +6,7 @@
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+#include <immintrin.h>
 
 static inline void getRGB(uint8_t *im, int width, int height, int nchannels, int x, int y, int *r, int *g, int *b)
 {
@@ -74,14 +75,19 @@ int main(int nargs, char **argv)
 
         gettimeofday(&ini,NULL);
         // RGB to grey scale
-        int r, g, b;
-        for (int i = 0; i < width; i++)
+        int r, g, b, i, j;
+        float r_coef = 0.2989, green_coef = 0.5870, blue_coef = 0.1140, grey_val;
+
+        #pragma GCC ivdep
+        for (int idx = 0; idx < width * height; idx++)
         {
-            for (int j = 0; j < height; j++)
-            {
-                getRGB(rgb_image, width, height, 4, i, j, &r, &g, &b);
-                grey_image[j * width + i] = (int)(0.2989 * r + 0.5870 * g + 0.1140 * b);
-            }
+            i = idx % width; //Indice de las columnas
+            j = idx / width; //Indice de las filas
+            
+            getRGB(rgb_image, width, height, 4, i, j, &r, &g, &b);
+            grey_val = r_coef * r + green_coef * g + blue_coef * b;
+            grey_image[idx] = (int)(grey_val);
+            
         }
 
         stbi_write_jpg(grey_image_filename, width, height, 1, grey_image, 10);

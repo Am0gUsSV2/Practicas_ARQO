@@ -1,7 +1,7 @@
 CC = gcc
 LIBS = -lm
 LIB_DIR = 
-FLAGS = -O3 -march=native -fwhole-program -Wall -D_GNU_SOURCE
+FLAGS = -O3 -march=native -fwhole-program -Wall -D_GNU_SOURCE -fopt-info-vec-missed
 
 .PHONY: clean all
 
