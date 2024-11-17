@@ -4,8 +4,8 @@
 
 # inicializar variables
 Ninicio=100
-Npaso=16
-Nfinal=$((Ninicio + 100))
+Npaso=100
+Nfinal=3000
 fDAT=slow_fast_time.dat
 fPNG=slow_fast_time.png
 

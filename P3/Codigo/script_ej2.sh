@@ -3,10 +3,10 @@
 #!/bin/bash
 
 # inicializar variables
-Ninicio=200
-Npaso=200
-Nfinal=2000
-fDAT=slow_fast_time.dat
+Ninicio=2000
+Npaso=2000
+Nfinal=20000
+fDAT=time_slow_fast.dat
 fPNG=slow_fast_time.png
 i=0
 maxiteraciones=10
@@ -37,12 +37,9 @@ for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 		slowTime=$(echo "$slowTime + $nslowTime" | bc)
 		fastTime=$(echo "$fastTime + $nfastTime" | bc)
 	done
-	echo "SlowTime es: $slowTime"
-	echo "FastTime es: $fastTime"
+	
 	slowTime=$(echo "scale=10; $slowTime / $i" | bc)
 	fastTime=$(echo "scale=10; $fastTime / $i" | bc)
-	echo "SlowTime despues es: $slowTime"
-	echo "FastTime despues es: $fastTime"
 
 	echo "$N	$slowTime	$fastTime" >> $fDAT
 done

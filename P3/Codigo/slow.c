@@ -44,6 +44,7 @@ int main( int argc, char *argv[])
 }
 
 
+/*La suma la hace sumando los elementos columna a columna*/
 tipo compute(tipo **matrix,int n)
 {
 	tipo sum=0;
