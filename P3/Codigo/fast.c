@@ -43,7 +43,7 @@ int main( int argc, char *argv[])
 	return 0;
 }
 
-
+/*La suma la hace sumando los elementos fila a fila*/
 tipo compute(tipo **matrix,int n)
 {
 	tipo sum=0;
