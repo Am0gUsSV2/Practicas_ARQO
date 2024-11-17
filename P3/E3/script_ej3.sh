@@ -40,8 +40,6 @@ for ((i = 1; i <= $maxi ; i *= 2)); do
 	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 
 		echo "N: $N / $Nfinal..."
-		echo "L1size= $L1_size"
-		echo "fichero es el "
 		valgrind --tool=cachegrind --cachegrind-out-file=$slow_raw_file_name --I1=$L1_size,$associativity,$line_size --D1=$L1_size,$associativity,$line_size --I1=$LL_cache,$associativity,$line_size ./slow $N 
 		cg_annotate $slow_raw_file_name | head -n 30 >> $slow_annotate_file_name
 		read D1mr_slow D1mw_slow < <(awk 'NR == 18 {gsub(",", ""); gsub(/\([^)]*\)/, ""); gsub(/PROGRAM TOTALS/, ""); print $5, $8}' $slow_annotate_file_name)
