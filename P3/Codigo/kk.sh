@@ -1,0 +1,1 @@
+echo "skibidi sigma ohio"

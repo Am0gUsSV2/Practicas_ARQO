@@ -1,3 +1,5 @@
+# Ejemplo script, para P3 arq 2024-2025
+
 #!/bin/bash
 
 # inicializar variables
