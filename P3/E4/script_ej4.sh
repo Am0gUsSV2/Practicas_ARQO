@@ -1,5 +1,3 @@
-# Ejemplo script, para P3 arq 2024-2025
-
 #!/bin/bash
 
 # inicializar variables
@@ -29,7 +27,7 @@ tPNG=mult_time.png
 
 
 # borrar el fichero DAT y el fichero PNG
-rm -f $fDAT $fPNG
+rm -f $fDAT $rPNG $wPNG $tPNG
 
 make clean
 

@@ -1,5 +1,3 @@
-# Ejemplo script, para P3 arq 2024-2025
-
 #!/bin/bash
 
 # inicializar variables
@@ -22,16 +20,11 @@ make clean
 make
 
 echo "Running slow and fast..."
-# bucle para N desde P hasta Q 
-#for N in $(seq $Ninicio $Npaso $Nfinal);
+
 for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 	echo "N: $N / $Nfinal..."
 	for ((i = 1, slowTime = 0, fastTime = 0; i <= $maxiteraciones ; i += 1)); do
 		echo "Iteracion numero $i del tamanio de matriz $N"
-		# ejecutar los programas slow y fast consecutivamente con tamaño de matriz N
-		# para cada uno, filtrar la línea que contiene el tiempo y seleccionar la
-		# tercera columna (el valor del tiempo). Dejar los valores en variables
-		# para poder imprimirlos en la misma línea del fichero de datos
 		nslowTime=$(./slow $N | grep 'time' | awk '{print $3}')
 		nfastTime=$(./fast $N | grep 'time' | awk '{print $3}')
 		slowTime=$(echo "$slowTime + $nslowTime" | bc)
@@ -45,8 +38,6 @@ for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 done
 
 echo "Generating plot..."
-# llamar a gnuplot para generar el gráfico y pasarle directamente por la entrada
-# estándar el script que está entre "<< END_GNUPLOT" y "END_GNUPLOT"
 gnuplot << END_GNUPLOT
 set title "Slow-Fast Execution Time"
 set ylabel "Execution time (s)"

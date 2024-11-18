@@ -23,7 +23,7 @@ rPNG=cache_lectura.png
 wPNG=cache_escritura.png
 
 # borrar el fichero DAT y el fichero PNG
-rm -f *.png
+rm -f $rPNG $wPNG
 rm -f *.dat
 
 make clean
@@ -40,10 +40,10 @@ for ((i = 1; i <= $maxi ; i *= 2)); do
 	for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 
 		echo "N: $N / $Nfinal..."
-		valgrind --tool=cachegrind --cachegrind-out-file=$slow_raw_file_name --I1=$L1_size,$associativity,$line_size --D1=$L1_size,$associativity,$line_size --I1=$LL_cache,$associativity,$line_size ./slow $N 
+		valgrind --tool=cachegrind --cachegrind-out-file=$slow_raw_file_name --I1=$L1_size,$associativity,$line_size --D1=$L1_size,$associativity,$line_size --LL=$LL_cache,$associativity,$line_size ./slow $N 
 		cg_annotate $slow_raw_file_name | head -n 30 >> $slow_annotate_file_name
 		read D1mr_slow D1mw_slow < <(awk 'NR == 18 {gsub(",", ""); gsub(/\([^)]*\)/, ""); gsub(/PROGRAM TOTALS/, ""); print $5, $8}' $slow_annotate_file_name)
-		valgrind --tool=cachegrind --cachegrind-out-file=$fast_raw_file_name --I1=$L1_size,$associativity,$line_size --D1=$L1_size,$associativity,$line_size --I1=$LL_cache,$associativity,$line_size ./fast $N
+		valgrind --tool=cachegrind --cachegrind-out-file=$fast_raw_file_name --I1=$L1_size,$associativity,$line_size --D1=$L1_size,$associativity,$line_size --LL=$LL_cache,$associativity,$line_size ./fast $N
 		cg_annotate $fast_raw_file_name | head -n 30 >> $fast_annotate_file_name
 		read D1mr_fast D1mw_fast < <(awk 'NR == 18 {gsub(",", ""); gsub(/\([^)]*\)/, ""); gsub(/PROGRAM TOTALS/, ""); print $5, $8}' $fast_annotate_file_name)
 		echo "$N	$D1mr_slow	$D1mw_slow	$D1mr_fast	$D1mw_fast	" >> cache_$L1_size.dat	
