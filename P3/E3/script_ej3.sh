@@ -68,7 +68,7 @@ plot "cache_1024.dat" using 1:2 with lines lw 2 title "1024B L1 slow", \
      "cache_1024.dat" using 1:4 with lines lw 2 title "1024B L1 fast", \
      "cache_2048.dat" using 1:4 with lines lw 2 title "2048B L1 fast", \
      "cache_4096.dat" using 1:4 with lines lw 2 title "4096B L1 fast", \
-	 "cache_8192.dat" using 1:4 with lines lw 2 title "8192B L1 fast", \
+	 "cache_8192.dat" using 1:4 with lines lw 2 title "8192B L1 fast"
 replot
 quit
 END_GNUPLOT
