@@ -5,7 +5,7 @@ Ninicio=1000
 Npaso=500
 Nfinal=4000
 i=1
-maxi=4
+maxi=8
 L1_size=0
 L1_base=1024
 LL_cache=8388608 #8MB
@@ -64,9 +64,11 @@ set output "$rPNG"
 plot "cache_1024.dat" using 1:2 with lines lw 2 title "1024B L1 slow", \
      "cache_2048.dat" using 1:2 with lines lw 2 title "2048B L1 slow", \
      "cache_4096.dat" using 1:2 with lines lw 2 title "4096B L1 slow", \
+	 "cache_8192.dat" using 1:2 with lines lw 2 title "8192B L1 slow", \
      "cache_1024.dat" using 1:4 with lines lw 2 title "1024B L1 fast", \
      "cache_2048.dat" using 1:4 with lines lw 2 title "2048B L1 fast", \
-     "cache_4096.dat" using 1:4 with lines lw 2 title "4096B L1 fast"
+     "cache_4096.dat" using 1:4 with lines lw 2 title "4096B L1 fast", \
+	 "cache_8192.dat" using 1:4 with lines lw 2 title "8192B L1 fast", \
 replot
 quit
 END_GNUPLOT
@@ -83,9 +85,11 @@ set output "$wPNG"
 plot "cache_1024.dat" using 1:3 with lines lw 2 title "1024B L1 slow", \
      "cache_2048.dat" using 1:3 with lines lw 2 title "2048B L1 slow", \
      "cache_4096.dat" using 1:3 with lines lw 2 title "4096B L1 slow", \
+	 "cache_8192.dat" using 1:3 with lines lw 2 title "8192B L1 slow", \
      "cache_1024.dat" using 1:5 with lines lw 2 title "1024B L1 fast", \
      "cache_2048.dat" using 1:5 with lines lw 2 title "2048B L1 fast", \
-     "cache_4096.dat" using 1:5 with lines lw 2 title "4096B L1 fast"
+     "cache_4096.dat" using 1:5 with lines lw 2 title "4096B L1 fast", \
+	 "cache_8192.dat" using 1:5 with lines lw 2 title "8192B L1 fast"
 replot
 quit
 END_GNUPLOT
