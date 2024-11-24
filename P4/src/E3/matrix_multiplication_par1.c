@@ -12,25 +12,24 @@ void multiply_matrix(tipo **m1,tipo **m2, tipo **m_res, int n);
 
 int main( int argc, char *argv[])
 {
-	int n, i, j;
+	int n, i, j, nthreads;
 	char debug = 'n';
 	tipo **m1=NULL, **m2=NULL, **m_res=NULL;
 	struct timeval fin,ini;
 
-	printf("Word size: %ld bits\n",8*sizeof(tipo));
-
-	if( argc!=2)
+	if( argc!=3)
 	{
-		if(argc !=3)
+		if(argc !=4)
 		{
 			printf("Error! Use: ./%s <matrix size>\n", argv[0]);
 			return -1;
 		}
-		debug = argv[2][0];
+		debug = argv[3][0];
 	}
 
 	n=atoi(argv[1]);
-
+	nthreads = atoi(argv[2]);
+	omp_set_num_threads(nthreads);
 
 	m1=generateMatrix(n);
 	if( !m1 )
