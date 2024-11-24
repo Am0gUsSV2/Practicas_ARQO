@@ -1,18 +1,20 @@
-// ----------- Arqo P4 -----------------------
-// pescalar_serie
+// ----------- Arqo P4-----------------------
+// pescalar_par1
+// ¿Funciona correctamente?
 //
-
+#include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "arqo4.h"
 
 int main(void)
 {
+	int nproc;
 	tipo *A=NULL, *B=NULL;
 	long long k=0;
 	struct timeval fin,ini;
 	double sum=0;
-	
+     	
 	A = generateVectorOne(M);
 	B = generateVectorOne(M);
 	if ( !A || !B )
@@ -21,15 +23,23 @@ int main(void)
 		freeVector(A);
 		freeVector(B);
 		return -1;
-	} 
+	}
 	
+        nproc=omp_get_num_procs();
+        omp_set_num_threads(nproc);   
+     
+        printf("Se han lanzado %d hilos.\n",nproc);
+
 	gettimeofday(&ini,NULL);
 	/* Bloque de computo */
 	sum = 0;
+	
+        #pragma omp parallel for reduction (+ : sum)
 	for(k=0;k<M;k++)
 	{
 		sum = sum + A[k]*B[k];
 	}
+
 	/* Fin del computo */
 	gettimeofday(&fin,NULL);
 
