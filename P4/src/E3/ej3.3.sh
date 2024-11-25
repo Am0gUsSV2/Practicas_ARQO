@@ -2,46 +2,44 @@
 
 # inicializar variables
 Ninicio=512
-Npaso=256
-Nfinal=2048
+Npaso=512
+Nfinal=4096
 fDAT=E3.3times.dat
-fSPE=E3.3speedup.dat
-fPNG=E3_3.png
-i=0
-maxiteraciones=10
-nthreads=4
-n_result_aux=0
+fSPNG=E3_3_speedup.png
+fPNG=E3_3_Ex_times.png
 n_result=0
-par_result_aux=0
 par_result=0
-aceleracion=0
+aceleracion_n=1
+aceleracion_par=0
 N=0
+nthreads=4
 
 # borrar el fichero DAT y el fichero PNG
-rm -f $fDAT $fPNG
+rm -f $fDAT $fPNG $fSPNG
 
 # generar el fichero DAT vacío
 touch $fDAT
 
-make clean
+make -C .. clean
 
-make
+make -C ..
 
 echo "Running E3.3..."
 echo "Matrix multiplication serie"
 
 for ((N = Ninicio ; N <= Nfinal ; N += Npaso)); do
 	echo "N: $N / $Nfinal..."
-	n_result=$("../bin/matrix_multiplication" $N | grep 'time' | awk '{print $3}')
-	par_result=$("../bin/matrix_multiplication_par2" $N $nthreads | grep 'time' | awk '{print $3}')
-
-	aceleracion=$(echo "scale=10; $n_result / $par_result" | bc)
-	echo "$N"	"$n_result"		"$par_result"	"$aceleracion" >> $fDAT
+	echo "Serie matrix multiplication"
+	n_result=$("../exe/matrix_multiplication" $N | grep 'time' | awk '{print $3}')
+	echo "Parallel loop 3 matrix multiplication"
+	par_result=$("../exe/matrix_multiplication_par3" $N $nthreads | grep 'time' | awk '{print $3}')
+	aceleracion_par=$(echo "scale=10; $n_result / $par_result" | bc)
+	echo "$N"	"$n_result"		"$par_result"	"$aceleracion_n"	"$aceleracion_par" >> $fDAT
 done
 
 echo "Generating plot times E3.3 ..."
 gnuplot << END_GNUPLOT
-set title "Serie-Parallel Execution Time"
+set title "Serie-Parallel-Loop3 Execution Time"
 set ylabel "Execution time(s)"
 set xlabel "Matrix Size"
 set key right bottom
@@ -56,15 +54,15 @@ END_GNUPLOT
 
 echo "Generating plot speedup E3.3 ..."
 gnuplot << END_GNUPLOT
-set title "Serie-Parallel Speedup"
+set title "Serie-Parallel-Loop3 Speedup"
 set ylabel "Speedup"
 set xlabel "Matrix Size"
 set key right bottom
 set grid
 set term png
-set output "$fSPE"
-plot "$fDAT" using 1:2 with lines lw 2 title "Serie", \
-     "$fDAT" using 1:3 with lines lw 2 title "Parallel"
+set output "$fSPNG"
+plot "$fDAT" using 1:4 with lines lw 2 title "Serie", \
+     "$fDAT" using 1:5 with lines lw 2 title "Parallel"
 replot
 quit
 END_GNUPLOT

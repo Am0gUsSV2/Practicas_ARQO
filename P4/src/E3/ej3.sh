@@ -1,24 +1,13 @@
 #!/bin/bash
 
 # inicializar variables
-# Ninicio=2000
-# Npaso=2000
-# Nfinal=20000
-fDAT=E3times.dat
+fDAT=E3executiontimes.dat
 # fPNG=slow_fast_time.png
-i=0
-maxiteraciones=10
-nthreads=1
-maxthreads=4
-one_thread=0
-two_threads=0
-three_threads=0
-four_threads=0
-one_thread_aux=0
-two_threads_aux=0
-three_threads_aux=0
-four_threads_aux=0
-N=1000
+thread1=0
+thread2=0
+thread3=0
+thread4=0
+N=1800
 
 # borrar el fichero DAT y el fichero PNG
 rm -f $fDAT $fPNG
@@ -26,46 +15,28 @@ rm -f $fDAT $fPNG
 # generar el fichero DAT vacío
 touch $fDAT
 
-make clean
+make -C .. clean
 
-make
+make -C ..
 
 echo "Running E3..."
+echo "                       Tiempos de ejecucion (s)                       " >> $fDAT
+echo "Version/#hilos    |       1      |       2      |       3      |      4" >> $fDAT
 echo "Matrix multiplication serie"
-for ((i = 1, one_thread = 0; i <= $maxiteraciones ; i += 1)); do
-	one_thread_aux=$(./matrix_multiplication $N | grep 'time' | awk '{print $3}')
-	one_thread=$(echo "$one_thread + $one_thread_aux" | bc)
+
+thread1=$("../exe/matrix_multiplication" $N | grep 'time' | awk '{print $3}')
+echo "Serie             |   ${thread1//./,}   |   ${thread1//./,}   |   ${thread1//./,}   |   ${thread1//./,}" >> $fDAT
+
+for ((i = 1 ; i <= 3 ; i += 1)); do
+	echo "Midiendo tiempos del bucle $i"
+	echo "1 hilo"
+	thread1=$("../exe/matrix_multiplication_par$i" $N 1 | grep 'time' | awk '{print $3}')
+	echo "2 hilos"
+	thread2=$("../exe/matrix_multiplication_par$i" $N 2 | grep 'time' | awk '{print $3}')
+	echo "3 hilos"
+	thread3=$("../exe/matrix_multiplication_par$i" $N 3 | grep 'time' | awk '{print $3}')
+	echo "4 hilos"
+	thread4=$("../exe/matrix_multiplication_par$i" $N 4 | grep 'time' | awk '{print $3}')
+
+	echo "Paralela,bucle$i   |   ${thread1//./,}   |   ${thread2//./,}   |   ${thread3//./,}   |   ${thread4//./,}" >> $fDAT
 done
-
-one_thread=$(echo "scale=10; $one_thread / $maxiteraciones" | bc)
-echo "$one_thread" >> $fDAT
-
-for ((nthreads = 1 ; nthreads <= maxthreads ; nthreads += 1)); do
-	echo "N: $N / $Nfinal..."
-
-	nslowTime=$(./slow $N | grep 'time' | awk '{print $3}')
-	nfastTime=$(./fast $N | grep 'time' | awk '{print $3}')
-	slowTime=$(echo "$slowTime + $nslowTime" | bc)
-	fastTime=$(echo "$fastTime + $nfastTime" | bc)
-
-	
-	slowTime=$(echo "scale=10; $slowTime / $i" | bc)
-	fastTime=$(echo "scale=10; $fastTime / $i" | bc)
-
-	echo "$N	$slowTime	$fastTime" >> $fDAT
-done
-
-# echo "Generating plot..."
-# gnuplot << END_GNUPLOT
-# set title "Slow-Fast Execution Time"
-# set ylabel "Execution time (s)"
-# set xlabel "Matrix Size"
-# set key right bottom
-# set grid
-# set term png
-# set output "$fPNG"
-# plot "$fDAT" using 1:2 with lines lw 2 title "slow", \
-#      "$fDAT" using 1:3 with lines lw 2 title "fast"
-# replot
-# quit
-# END_GNUPLOT

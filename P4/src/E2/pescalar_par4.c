@@ -1,7 +1,3 @@
-// ----------- Arqo P4-----------------------
-// pescalar_par1
-// ¿Funciona correctamente?
-//
 #include <omp.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,22 +5,24 @@
 
 int main(int argc, char *argv[])
 {
-	int nproc, threshold = 1000000;
-	unsigned long long m;
-
 	tipo *A=NULL, *B=NULL;
 	long long k=0;
 	struct timeval fin,ini;
 	double sum=0;
 
-	if (argc == 2 ||argc == 3)
-     		m = strtoull(argv[1], NULL, 10);	
-        else
-		{
-        	printf("Debe introducirse un valor para el limite de los vectores\n");
-			return -1;
-		}
+	int nproc;
+	unsigned long long m;
 
+	if (argc == 2 ||argc == 3)
+	{
+		m = strtoull(argv[1], NULL, 10);
+		printf("Tamanio del vector = %llu\n", m);	
+	}
+	else
+	{	
+		m = M;
+		printf("Tamanio por defecto = %llu\n", m);
+	}
 
 	A = generateVectorOne(m);
 	B = generateVectorOne(m);
@@ -46,7 +44,7 @@ int main(int argc, char *argv[])
 		/* Bloque de computo */
 		sum = 0;
 		
-			#pragma omp parallel for reduction (+ : sum) if (m > threshold)
+			#pragma omp parallel for reduction (+ : sum)
 		for(k=0;k<m;k++)
 		{
 			sum = sum + A[k]*B[k];
@@ -57,6 +55,7 @@ int main(int argc, char *argv[])
 	}
 	else //Ejecucion no paralela
 	{
+		printf("EJECUCION EN SERIE\n");
 		gettimeofday(&ini,NULL);
 		/* Bloque de computo */
 		sum = 0;
