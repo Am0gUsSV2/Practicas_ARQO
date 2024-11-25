@@ -2,46 +2,53 @@ CC = gcc
 LIBS = -lgomp -lm
 LIB_DIR =  
 FLAGS = -g -Wall -D_GNU_SOURCE -fopenmp
+E1_DIR = E1/
+E2_DIR = E2/
+E3_DIR = E3/
+E4_DIR = E4/
+E5_DIR = E5/
+UTILS_DIR = utils/
+BIN_DIR = bin/
 
 .PHONY: clean all
 
 all: omp1 omp2 pescalar_serie pescalar_par1 pescalar_par2 pescalar_par3 pescalar_par4 matrix_multiplication matrix_multiplication_par1 matrix_multiplication_par2 matrix_multiplication_par3 edgeDetector clear
 
-omp1: omp1.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+omp1: $(E1_DIR)omp1.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-omp2: omp2.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+omp2: $(E1_DIR)omp2.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-pescalar_serie: pescalar_serie.c arqo4.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+pescalar_serie: $(E2_DIR)pescalar_serie.c $(UTILS_DIR)arqo4.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-pescalar_par1: pescalar_par1.c arqo4.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+pescalar_par1: $(E2_DIR)pescalar_par1.c $(UTILS_DIR)arqo4.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-pescalar_par2: pescalar_par2.c arqo4.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+pescalar_par2: $(E2_DIR)pescalar_par2.c $(UTILS_DIR)arqo4.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-pescalar_par3: pescalar_par3.c arqo4.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+pescalar_par3: $(E2_DIR)pescalar_par3.c $(UTILS_DIR)arqo4.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-pescalar_par4: pescalar_par4.c arqo4.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+pescalar_par4: $(E2_DIR)pescalar_par4.c $(UTILS_DIR)arqo4.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-matrix_multiplication: matrix_multiplication.c arqo3.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+matrix_multiplication: $(E3_DIR)matrix_multiplication.c $(UTILS_DIR)arqo3.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-matrix_multiplication_par1: matrix_multiplication_par1.c arqo3.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+matrix_multiplication_par1: $(E3_DIR)matrix_multiplication_par1.c $(UTILS_DIR)arqo3.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-matrix_multiplication_par2: matrix_multiplication_par2.c arqo3.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+matrix_multiplication_par2: $(E3_DIR)matrix_multiplication_par2.c $(UTILS_DIR)arqo3.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-matrix_multiplication_par3: matrix_multiplication_par3.c arqo3.c
-	$(CC) $(FLAGS) $(LIB_DIR) -o $@ $^ $(LIBS)
+matrix_multiplication_par3: $(E3_DIR)matrix_multiplication_par3.c $(UTILS_DIR)arqo3.c
+	$(CC) $(FLAGS) -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $^ $(LIBS)
 
-edgeDetector: edgeDetector.c stb_image_write.h stb_image.h
-	$(CC) $(FLAGS) -std=gnu99 $(LIB_DIR) -o $@ edgeDetector.c $(LIBS)
+edgeDetector: $(E5_DIR)edgeDetector.c $(E5_DIR)stb_image_write.h $(E5_DIR)stb_image.h
+	$(CC) $(FLAGS) -std=gnu99 -I$(UTILS_DIR) $(LIB_DIR) -o $(BIN_DIR)$@ $(E5_DIR)edgeDetector.c $(LIBS)
 
 stb_image.h:
 	@echo "Los ficheros de cabecera de stb se deberían descarga automáticamente"
@@ -54,7 +61,7 @@ stb_image_write.h:
 	wget --no-check-certificate https://raw.githubusercontent.com/nothings/stb/master/stb_image_write.h
 
 clean:
-	rm -f *.o *~ omp1 omp2 pescalar_serie pescalar_par1 pescalar_par2 pescalar_par3 pescalar_par4 matrix_multiplication matrix_multiplication_par1 matrix_multiplication_par2 matrix_multiplication_par3 edgeDetector
+	rm -f $(BIN_DIR)*
 	
 clear:
-	rm -f *.o *~
+	rm -f $(BIN_DIR)*.o $(BIN_DIR)*~

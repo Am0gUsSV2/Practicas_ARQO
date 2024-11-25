@@ -42,13 +42,12 @@ echo "$one_thread" >> $fDAT
 
 for ((nthreads = 1 ; nthreads <= maxthreads ; nthreads += 1)); do
 	echo "N: $N / $Nfinal..."
-	for ((i = 1, slowTime = 0, fastTime = 0; i <= $maxiteraciones ; i += 1)); do
-		echo "Iteracion numero $i del tamanio de matriz $N"
-		nslowTime=$(./slow $N | grep 'time' | awk '{print $3}')
-		nfastTime=$(./fast $N | grep 'time' | awk '{print $3}')
-		slowTime=$(echo "$slowTime + $nslowTime" | bc)
-		fastTime=$(echo "$fastTime + $nfastTime" | bc)
-	done
+
+	nslowTime=$(./slow $N | grep 'time' | awk '{print $3}')
+	nfastTime=$(./fast $N | grep 'time' | awk '{print $3}')
+	slowTime=$(echo "$slowTime + $nslowTime" | bc)
+	fastTime=$(echo "$fastTime + $nfastTime" | bc)
+
 	
 	slowTime=$(echo "scale=10; $slowTime / $i" | bc)
 	fastTime=$(echo "scale=10; $fastTime / $i" | bc)
