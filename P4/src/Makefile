@@ -55,6 +55,27 @@ matrix_multiplication_par3: $(E3_DIR)matrix_multiplication_par3.c $(UTILS_DIR)ar
 pi_serie: $(E4_DIR)pi_serie.c
 	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
 
+pi_par1: $(E4_DIR)pi_par1.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
+
+pi_par2: $(E4_DIR)pi_par2.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
+
+pi_par3: $(E4_DIR)pi_par3.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
+
+pi_par4: $(E4_DIR)pi_par4.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
+
+pi_par5: $(E4_DIR)pi_par5.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
+
+pi_par6: $(E4_DIR)pi_par6.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
+
+pi_par7: $(E4_DIR)pi_par7.c
+	$(CC) $(FLAGS) $(LIB_DIR) -o $(EXE_DIR)$@ $^ $(LIBS)
+
 edgeDetector: $(E5_DIR)edgeDetector.c $(E5_DIR)stb_image_write.h $(E5_DIR)stb_image.h
 	$(CC) $(FLAGS) -std=gnu99 -I$(UTILS_DIR) $(LIB_DIR) -o $(EXE_DIR)$@ $(E5_DIR)edgeDetector.c $(LIBS)
 
