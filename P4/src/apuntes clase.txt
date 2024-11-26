@@ -1,1 +1,0 @@
-en medidas de tiempo de la multiplicacion no hay que repetir 10 veces, solo 1 con que la mul serie sea 1 o dos minutos y con hilos tardara menos

@@ -6,6 +6,7 @@
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
+#include <omp.h>
 
 #define MEDIAN 0
 #define GAUSSIAN 1
@@ -52,7 +53,7 @@ int comparate(const void *a, const void *b)
 
 int main(int nargs, char **argv)
 {
-    int width, height, nchannels;
+    int width, height, nchannels, nthreads;
     struct timeval fin,ini;
 
     if (nargs < 2)
@@ -61,8 +62,14 @@ int main(int nargs, char **argv)
     }
     // For each image
     // Bucle 0
+    nthreads = omp_get_num_procs();
+	printf("Numero de cores del equipo: %d\n", nthreads);
+	omp_set_num_threads(nthreads);
+
+    #pragma omp parallel for
     for (int file_i = 1; file_i < nargs; file_i++)
     {
+        printf("Soy el hilo %d\n", omp_get_thread_num());
         printf("[info] Processing %s\n", argv[file_i]);
         /****** Reading file ******/
         uint8_t *rgb_image = stbi_load(argv[file_i], &width, &height, &nchannels, 4);
