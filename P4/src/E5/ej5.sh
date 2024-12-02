@@ -8,7 +8,7 @@ rm -f img/*denoised.jpg img/*grad.jpg img/*grey.jpg
 
 make -C .. clean
 
-make -C .. edgeDetector
+make -C .. edgeDetectorParallel
 
-echo "edgeDetector"
-"../exe/edgeDetector" "../E5/img/8k.jpg" "../E5/img/SD.jpg"
+echo "edgeDetectorParallel"
+"../exe/edgeDetectorParallel" "../E5/img/8k.jpg"
